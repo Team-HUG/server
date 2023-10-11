@@ -35,4 +35,8 @@ public class Food {
     public void injectImage(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
+    public void changeEvent() {
+        this.isEvent = !isEvent;
+    }
 }

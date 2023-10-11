@@ -33,4 +33,9 @@ public class FoodController {
     public FoodCategory getCategoryList() {
         return foodService.getCategory();
     }
+
+    @PatchMapping("/change/event/{id}")
+    public void changeEvent(@PathVariable(name = "id") Long id) {
+        foodService.changeEvent(id);
+    }
 }

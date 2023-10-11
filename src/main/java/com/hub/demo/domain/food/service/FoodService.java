@@ -2,6 +2,7 @@ package com.hub.demo.domain.food.service;
 
 import com.hub.demo.domain.food.domain.Food;
 import com.hub.demo.domain.food.domain.repository.FoodRepository;
+import com.hub.demo.domain.food.exception.FoodNotFoundException;
 import com.hub.demo.domain.food.presentation.dto.request.CreateRequestDto;
 import com.hub.demo.domain.food.presentation.dto.response.FoodCategory;
 import com.hub.demo.domain.food.presentation.dto.response.FoodListResponseDto;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -40,5 +42,13 @@ public class FoodService {
         List<String> category = foodRepository.findDistinctByCategory();
 
         return new FoodCategory(category);
+    }
+
+    @Transactional
+    public void changeEvent(Long id) {
+        Food food = foodRepository.findById(id)
+                .orElseThrow(() -> FoodNotFoundException.EXCEPTION);
+
+        food.changeEvent();
     }
 }
