@@ -1,12 +1,12 @@
 server:
-  address: 192.168.7.190
+  address: ${IP}
 
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/hub
-    username: root
-    password: Awltjr!0419
+    url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    username: ${USERNAME}
+    password: ${PASSWORD}
   jpa:
     hibernate:
       ddl-auto: update
@@ -15,9 +15,9 @@ spring:
 cloud:
   aws:
     s3:
-      bucket: toongether-s3
+      bucket: ${S3_BUCKET}
     stack.auto: false
-    region.static: ap-northeast-2
+    region.static: ${REGION_STATIC}
     credentials:
-      access-key: AKIA32L5MJWELTOGVDOA
-      secret-key: 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
+      access-key: ${ACCESS_KEY}
+      secret-key: ${SECRET_KEY}
