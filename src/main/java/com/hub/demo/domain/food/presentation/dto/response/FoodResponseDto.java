@@ -12,12 +12,12 @@ public class FoodResponseDto {
 
     private String price;
 
-    private String image;
+    private String imageUrl;
 
     public FoodResponseDto(Food food) {
         this.category = food.getCategory();
         this.foodName = food.getFoodName();
         this.price = food.getPrice();
-        this.image = food.getImage();
+        this.imageUrl = food.getImageUrl();
     }
 }
