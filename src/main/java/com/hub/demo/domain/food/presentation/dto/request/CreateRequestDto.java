@@ -14,14 +14,12 @@ public class CreateRequestDto {
 
     private String price;
 
-    private String image;
 
     public Food toEntity(CreateRequestDto requestDto) {
         return Food.builder()
                 .category(requestDto.category)
                 .foodName(requestDto.foodName)
                 .price(requestDto.price)
-                .image(requestDto.image)
                 .build();
     }
 }
