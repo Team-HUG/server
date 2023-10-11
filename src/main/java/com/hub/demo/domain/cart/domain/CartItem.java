@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Table(name = "cart_item")
@@ -28,6 +30,14 @@ public class CartItem {
 
     private int quantity;
 
+    private LocalDateTime orderTime;
+
+    @Column(columnDefinition = "TINYINT(1) default 0")
+    private boolean isComplete;
+
+    @Column(columnDefinition = "TINYINT(1) default 0")
+    private boolean isOrder;
+
     public CartItem(Cart cart, Food food, int quantity) {
         this.cart = cart;
         this.food = food;
@@ -36,5 +46,13 @@ public class CartItem {
 
     public void changeQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public void changeIsOrder() {
+        this.isOrder = !isOrder;
+    }
+
+    public void submitOrderTime() {
+        this.orderTime = LocalDateTime.now();
     }
 }

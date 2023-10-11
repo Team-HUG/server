@@ -32,8 +32,6 @@ public class CartService {
         Food food = foodRepository.findById(requestDto.getFoodId())
                 .orElseThrow(() -> FoodNotFoundException.EXCEPTION);
 
-        log.info(cartItemRepository.existsByFood(food).toString());
-
         if (!cartItemRepository.existsByFood(food) &&
                 cartItemRepository.existsByCart(cart))  {
             CartItem cartItem = new CartItem(cart, food, requestDto.getQuantity());
@@ -50,7 +48,7 @@ public class CartService {
     public List<CartListResponseDto> getCartFoodList() {
         Cart cart = cartRepository.findByTableNumber(1);
 
-        List<CartItem> cartItems = cartItemRepository.findAllByCart(cart);
+        List<CartItem> cartItems = cartItemRepository.findAllByCartAndIsOrder(cart, false);
 
         return cartItems.stream().map(it -> new CartListResponseDto(it.getFood(), it)).toList();
     }
@@ -61,5 +59,17 @@ public class CartService {
                 .orElseThrow(() -> CartFoodNotFoundException.EXCEPTION);
 
         cartItemRepository.delete(cartItem);
+    }
+
+    public void submitOrder() {
+        Cart cart = cartRepository.findByTableNumber(1);
+
+        List<CartItem> cartItems = cartItemRepository.findAllByCartAndIsOrder(cart, false);
+
+        cartItems.forEach(it -> {
+            it.changeIsOrder();
+            it.submitOrderTime();
+        });
+        cartItemRepository.saveAll(cartItems);
     }
 }

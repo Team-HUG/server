@@ -5,6 +5,8 @@ import lombok.Getter;
 
 @Getter
 public class FoodResponseDto {
+    private Long Id;
+
     private String category;
 
     private String foodName;
@@ -16,6 +18,7 @@ public class FoodResponseDto {
     private Boolean isEvent;
 
     public FoodResponseDto(Food food) {
+        this.Id = food.getId();
         this.isEvent = food.getIsEvent();
         this.category = food.getCategory();
         this.foodName = food.getFoodName();

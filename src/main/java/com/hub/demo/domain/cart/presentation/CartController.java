@@ -32,4 +32,9 @@ public class CartController {
     public void deleteFood(@PathVariable(name = "id") Long id) {
         cartService.deleteCartFood(id);
     }
+
+    @PostMapping("/submit/order")
+    public void submitOrder() {
+        cartService.submitOrder();
+    }
 }
