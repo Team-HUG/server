@@ -12,7 +12,7 @@ public class CreateRequestDto {
 
     private String foodName;
 
-    private String price;
+    private int price;
 
 
     public Food toEntity(CreateRequestDto requestDto) {
