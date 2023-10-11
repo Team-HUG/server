@@ -51,4 +51,9 @@ public class FoodService {
 
         food.changeEvent();
     }
+
+    @Transactional
+    public void deleteFood(Long id) {
+        foodRepository.deleteById(id);
+    }
 }

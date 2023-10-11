@@ -38,4 +38,10 @@ public class FoodController {
     public void changeEvent(@PathVariable(name = "id") Long id) {
         foodService.changeEvent(id);
     }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/delete/{id}")
+    public void deleteFood(@PathVariable(name = "id") Long id) {
+        foodService.deleteFood(id);
+    }
 }
