@@ -9,5 +9,4 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RecommendResponseDto {
     private String food;
-    private String body;
 }
