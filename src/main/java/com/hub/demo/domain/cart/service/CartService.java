@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Slf4j
 @Service
@@ -36,12 +37,9 @@ public class CartService {
         Food food = foodRepository.findById(requestDto.getFoodId())
                 .orElseThrow(() -> FoodNotFoundException.EXCEPTION);
 
-        log.info(cartItemRepository.existsByFood(food).toString());
-        log.info(cartItemRepository.existsByCart(cart).toString());
-
-        if (cartItemRepository.existsByFood(food) &&
-                cartItemRepository.existsByCart(cart))  {
-            CartItem cartItem = cartItemRepository.findByCartAndFood(cart, food);
+        if (cartItemRepository.existsByFoodAndIsOrder(food, false) &&
+                cartItemRepository.existsByCartAndIsOrder(cart, false))  {
+            CartItem cartItem = cartItemRepository.findByCartAndFoodAndIsOrder(cart, food, false);
             cartItem.changeQuantity(requestDto.getQuantity());
             cartItemRepository.save(cartItem);
         } else {
@@ -68,8 +66,9 @@ public class CartService {
         cartItemRepository.delete(cartItem);
     }
 
-    public void submitOrder() {
+    public boolean submitOrder() {
         Cart cart = cartRepository.findByTableNumber(1);
+        AtomicBoolean isEvent = new AtomicBoolean(false);
 
         List<CartItem> cartItems = cartItemRepository.findAllByCartAndIsOrder(cart, false);
 
@@ -77,9 +76,25 @@ public class CartService {
             throw CartFoodIsEmptyException.EXCEPTION;
         }
 
+        cartItems.forEach(cartItem -> {
+            if (cartItem.getFood().getIsEvent() == true) {
+                isEvent.set(true);
+            }
+        });
+
         cartItems.forEach(CartItem::submitOrder);
         Order order = new Order(cartItems);
         cartItemRepository.saveAll(cartItems);
         orderRepository.save(order);
+
+        return isEvent.get();
+    }
+
+    @Transactional
+    public void deleteCartItem() {
+        Cart cart = cartRepository.findByTableNumber(1);
+        List<CartItem> cartItems = cartItemRepository.findAllByCartAndIsOrder(cart, false);
+
+        cartItemRepository.deleteAll(cartItems);
     }
 }
