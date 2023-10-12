@@ -4,6 +4,7 @@ import com.hub.demo.domain.cart.domain.Cart;
 import com.hub.demo.domain.cart.domain.CartItem;
 import com.hub.demo.domain.cart.domain.repository.CartItemRepository;
 import com.hub.demo.domain.cart.domain.repository.CartRepository;
+import com.hub.demo.domain.cart.exception.CartFoodIsEmptyException;
 import com.hub.demo.domain.cart.exception.CartFoodNotFoundException;
 import com.hub.demo.domain.cart.presentation.dto.request.CartFoodAddRequestDto;
 import com.hub.demo.domain.cart.presentation.dto.response.CartListResponseDto;
@@ -71,6 +72,10 @@ public class CartService {
         Cart cart = cartRepository.findByTableNumber(1);
 
         List<CartItem> cartItems = cartItemRepository.findAllByCartAndIsOrder(cart, false);
+
+        if (cartItems.isEmpty()) {
+            throw CartFoodIsEmptyException.EXCEPTION;
+        }
 
         cartItems.forEach(CartItem::submitOrder);
         Order order = new Order(cartItems);
