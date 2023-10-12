@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,7 +29,11 @@ public class FoodListBuilder {
     }
 
     public List<OrderListResponseDto> orderBuilder(List<Order> orders) {
-        return orders.stream()
+        List<Order> sortedOrders = orders.stream()
+                .sorted(Comparator.comparing(Order::getCreateDate).reversed())
+                .toList();
+
+        return sortedOrders.stream()
                 .map(it -> OrderListResponseDto.builder()
                         .id(it.getId())
                         .responseDtoList(it.getOrderItems().stream()
