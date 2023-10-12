@@ -10,6 +10,7 @@ import com.hub.demo.domain.cart.presentation.dto.response.CartListResponseDto;
 import com.hub.demo.domain.food.domain.Food;
 import com.hub.demo.domain.food.domain.repository.FoodRepository;
 import com.hub.demo.domain.food.exception.FoodNotFoundException;
+import com.hub.demo.domain.order.domain.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CartService {
+    private final OrderRepository orderRepository;
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
     private final FoodRepository foodRepository;
@@ -32,13 +34,16 @@ public class CartService {
         Food food = foodRepository.findById(requestDto.getFoodId())
                 .orElseThrow(() -> FoodNotFoundException.EXCEPTION);
 
-        if (!cartItemRepository.existsByFood(food) &&
+        log.info(cartItemRepository.existsByFood(food).toString());
+        log.info(cartItemRepository.existsByCart(cart).toString());
+
+        if (cartItemRepository.existsByFood(food) &&
                 cartItemRepository.existsByCart(cart))  {
-            CartItem cartItem = new CartItem(cart, food, requestDto.getQuantity());
-            cartItemRepository.save(cartItem);
-        } else {
             CartItem cartItem = cartItemRepository.findByCartAndFood(cart, food);
             cartItem.changeQuantity(requestDto.getQuantity());
+            cartItemRepository.save(cartItem);
+        } else {
+            CartItem cartItem = new CartItem(cart, food, requestDto.getQuantity());
             cartItemRepository.save(cartItem);
         }
 
@@ -66,10 +71,8 @@ public class CartService {
 
         List<CartItem> cartItems = cartItemRepository.findAllByCartAndIsOrder(cart, false);
 
-        cartItems.forEach(it -> {
-            it.changeIsOrder();
-            it.submitOrderTime();
-        });
-        cartItemRepository.saveAll(cartItems);
+        cartItems.forEach(CartItem::submitOrder);
+//        Order order =
+//        cartItemRepository.saveAll(cartItems);
     }
 }
