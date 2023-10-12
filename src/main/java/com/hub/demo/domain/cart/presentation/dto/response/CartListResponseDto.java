@@ -6,7 +6,9 @@ import lombok.Getter;
 
 @Getter
 public class CartListResponseDto {
-    private Long id;
+    private Long cartId;
+
+    private Long foodId;
 
     private String foodName;
 
@@ -24,6 +26,7 @@ public class CartListResponseDto {
         this.isEvent = food.getIsEvent();
         this.imageUrl = food.getImageUrl();
         this.quantity = cartItem.getQuantity();
-        this.id = cartItem.getId();
+        this.cartId = cartItem.getId();
+        this.foodId = food.getId();
     }
 }
