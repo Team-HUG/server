@@ -29,7 +29,7 @@ public class CartItem {
     private int quantity;
 
     @Column(columnDefinition = "TINYINT(1) default 0")
-    private boolean isOrder;
+    private Boolean isOrder;
 
     public CartItem(Cart cart, Food food, int quantity) {
         this.cart = cart;

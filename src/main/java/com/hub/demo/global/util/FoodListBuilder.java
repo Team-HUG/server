@@ -39,6 +39,7 @@ public class FoodListBuilder {
                         .responseDtoList(it.getOrderItems().stream()
                                 .map(OrderResponseDto::new).toList())
                         .orderTime(timeAgoFormatter.format(it.getCreateDate()))
+                        .isComplete(it.getIsComplete())
                         .tableNumber(1)
                         .build())
                 .collect(Collectors.toList());
