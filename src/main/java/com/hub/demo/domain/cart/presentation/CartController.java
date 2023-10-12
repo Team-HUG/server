@@ -34,7 +34,13 @@ public class CartController {
     }
 
     @PostMapping("/submit/order")
-    public void submitOrder() {
-        cartService.submitOrder();
+    public boolean submitOrder() {
+        return cartService.submitOrder();
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/delete")
+    public void deleteCartItem() {
+        cartService.deleteCartItem();
     }
 }
