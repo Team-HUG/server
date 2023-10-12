@@ -48,11 +48,8 @@ public class CartItem {
         this.quantity = quantity;
     }
 
-    public void changeIsOrder() {
+    public void submitOrder() {
         this.isOrder = !isOrder;
-    }
-
-    public void submitOrderTime() {
         this.orderTime = LocalDateTime.now();
     }
 }

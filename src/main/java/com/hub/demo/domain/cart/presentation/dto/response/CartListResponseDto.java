@@ -10,7 +10,7 @@ public class CartListResponseDto {
 
     private String foodName;
 
-    private String price;
+    private int price;
 
     private Boolean isEvent;
 
