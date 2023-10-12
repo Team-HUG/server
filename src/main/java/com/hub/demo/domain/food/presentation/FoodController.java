@@ -1,14 +1,18 @@
 package com.hub.demo.domain.food.presentation;
 
 import com.hub.demo.domain.food.presentation.dto.request.CreateRequestDto;
+import com.hub.demo.domain.food.presentation.dto.request.RecommendRequestDto;
 import com.hub.demo.domain.food.presentation.dto.response.FoodCategory;
 import com.hub.demo.domain.food.presentation.dto.response.FoodDetailResponseDto;
 import com.hub.demo.domain.food.presentation.dto.response.FoodListResponseDto;
+import com.hub.demo.domain.food.presentation.dto.response.FoodRecommendResponseDto;
 import com.hub.demo.domain.food.service.FoodService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/food")
@@ -49,5 +53,10 @@ public class FoodController {
     @DeleteMapping("/delete/{id}")
     public void deleteFood(@PathVariable(name = "id") Long id) {
         foodService.deleteFood(id);
+    }
+
+    @PostMapping("/recommend/food")
+    public List<FoodRecommendResponseDto> getRecommendFood(@RequestBody RecommendRequestDto requestDto) {
+        return foodService.getFood(requestDto);
     }
 }

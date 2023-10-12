@@ -4,19 +4,22 @@ import com.hub.demo.domain.food.domain.Food;
 import com.hub.demo.domain.food.domain.repository.FoodRepository;
 import com.hub.demo.domain.food.exception.FoodNotFoundException;
 import com.hub.demo.domain.food.presentation.dto.request.CreateRequestDto;
-import com.hub.demo.domain.food.presentation.dto.response.FoodCategory;
-import com.hub.demo.domain.food.presentation.dto.response.FoodDetailResponseDto;
-import com.hub.demo.domain.food.presentation.dto.response.FoodListResponseDto;
+import com.hub.demo.domain.food.presentation.dto.request.RecommendRequestDto;
+import com.hub.demo.domain.food.presentation.dto.request.WebClientRequestDto;
+import com.hub.demo.domain.food.presentation.dto.response.*;
 import com.hub.demo.global.s3.S3Uploader;
 import com.hub.demo.global.util.FoodListBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -64,5 +67,34 @@ public class FoodService {
     @Transactional
     public void deleteFood(Long id) {
         foodRepository.deleteById(id);
+    }
+
+    @Transactional
+    public List<FoodRecommendResponseDto> getFood(RecommendRequestDto requestDto) {
+        WebClient webClient = WebClient.builder()
+                .baseUrl("http://127.0.0.1:8000")
+                .build();
+
+        List<Food> foodList = foodRepository.findAll();
+
+        WebClientRequestDto webClientRequestDto = new WebClientRequestDto(requestDto);
+
+        webClientRequestDto.injectFoodList(foodList);
+
+        RecommendListResponseDto responseDto = webClient.post()
+                .uri("/posts")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(webClientRequestDto)
+                .retrieve()
+                .bodyToMono(RecommendListResponseDto.class)
+                .block();
+
+        List<Food> food = Objects.requireNonNull(responseDto).getRecommendations().stream()
+                .map(it -> foodRepository.findByFoodName(it.getFood())
+                    .orElseThrow(() -> FoodNotFoundException.EXCEPTION))
+                .toList();
+
+        return food.stream().map(FoodRecommendResponseDto::new)
+                .toList();
     }
 }
