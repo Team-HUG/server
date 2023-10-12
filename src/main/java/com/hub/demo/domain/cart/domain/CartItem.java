@@ -26,10 +26,10 @@ public class CartItem {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Food food;
 
-    private int quantity;
+    @Column(columnDefinition = "TINYINT(1) default 0", nullable = false)
+    private Boolean isOrder = false;
 
-    @Column(columnDefinition = "TINYINT(1) default 0")
-    private Boolean isOrder;
+    private int quantity;
 
     public CartItem(Cart cart, Food food, int quantity) {
         this.cart = cart;
