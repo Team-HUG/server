@@ -9,6 +9,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public class OrderResponseDto {
 
+    private String imageUrl;
+
     private String foodName;
 
     private int price;
@@ -16,6 +18,7 @@ public class OrderResponseDto {
     private int quantity;
 
     public OrderResponseDto(CartItem cartItem) {
+        this.imageUrl = cartItem.getFood().getImageUrl();
         this.foodName = cartItem.getFood().getFoodName();
         this.price = cartItem.getFood().getPrice();
         this.quantity = cartItem.getQuantity();

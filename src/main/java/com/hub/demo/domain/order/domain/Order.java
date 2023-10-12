@@ -24,9 +24,13 @@ public class Order {
     private LocalDateTime createDate = LocalDateTime.now();
 
     @Column(columnDefinition = "TINYINT(1) default 0")
-    private boolean isComplete;
+    private Boolean isComplete;
 
     public Order(List<CartItem> orderItems) {
         this.orderItems = orderItems;
+    }
+
+    public void changeIsComplete() {
+        this.isComplete = !isComplete;
     }
 }

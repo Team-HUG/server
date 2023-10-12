@@ -14,5 +14,7 @@ public class OrderListResponseDto {
 
     private int tableNumber;
 
+    private boolean isComplete;
+
     private String orderTime;
 }

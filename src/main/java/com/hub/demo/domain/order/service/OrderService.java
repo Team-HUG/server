@@ -1,8 +1,6 @@
 package com.hub.demo.domain.order.service;
 
 import com.hub.demo.domain.cart.domain.Cart;
-import com.hub.demo.domain.cart.domain.CartItem;
-import com.hub.demo.domain.cart.domain.repository.CartItemRepository;
 import com.hub.demo.domain.cart.domain.repository.CartRepository;
 import com.hub.demo.domain.order.domain.Order;
 import com.hub.demo.domain.order.domain.repository.OrderRepository;
@@ -28,5 +26,12 @@ public class OrderService {
         List<Order> order = orderRepository.findByOrderItems_Cart(cart);
 
         return foodListBuilder.orderBuilder(order);
+    }
+
+    public void isComplete(Long id) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow();
+
+        order.changeIsComplete();
     }
 }
