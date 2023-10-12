@@ -10,6 +10,7 @@ import com.hub.demo.domain.cart.presentation.dto.response.CartListResponseDto;
 import com.hub.demo.domain.food.domain.Food;
 import com.hub.demo.domain.food.domain.repository.FoodRepository;
 import com.hub.demo.domain.food.exception.FoodNotFoundException;
+import com.hub.demo.domain.order.domain.Order;
 import com.hub.demo.domain.order.domain.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -72,7 +73,8 @@ public class CartService {
         List<CartItem> cartItems = cartItemRepository.findAllByCartAndIsOrder(cart, false);
 
         cartItems.forEach(CartItem::submitOrder);
-//        Order order =
-//        cartItemRepository.saveAll(cartItems);
+        Order order = new Order(cartItems);
+        cartItemRepository.saveAll(cartItems);
+        orderRepository.save(order);
     }
 }
