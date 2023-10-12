@@ -12,9 +12,9 @@ import java.util.List;
 public interface CartItemRepository extends JpaRepository<CartItem, Long> {
     List<CartItem> findAllByCartAndIsOrder(Cart cart, boolean isOrder);
 
-    CartItem findByCartAndFood(Cart cart, Food food);
+    CartItem findByCartAndFoodAndIsOrder(Cart cart, Food food, boolean isOrder);
 
-    Boolean existsByFood(Food food);
+    Boolean existsByFoodAndIsOrder(Food food, boolean isOrder);
 
-    Boolean existsByCart(Cart cart);
+    Boolean existsByCartAndIsOrder(Cart cart, boolean isOrder);
 }
