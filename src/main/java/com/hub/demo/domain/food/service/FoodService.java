@@ -19,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -89,7 +88,7 @@ public class FoodService {
                 .bodyToMono(RecommendListResponseDto.class)
                 .block();
 
-        List<Food> food = Objects.requireNonNull(responseDto).getRecommendations().stream()
+        List<Food> food = responseDto.getRecommendations().stream()
                 .map(it -> foodRepository.findByFoodName(it.getFood())
                     .orElseThrow(() -> FoodNotFoundException.EXCEPTION))
                 .toList();
