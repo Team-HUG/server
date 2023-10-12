@@ -2,6 +2,7 @@ package com.hub.demo.domain.food.presentation;
 
 import com.hub.demo.domain.food.presentation.dto.request.CreateRequestDto;
 import com.hub.demo.domain.food.presentation.dto.response.FoodCategory;
+import com.hub.demo.domain.food.presentation.dto.response.FoodDetailResponseDto;
 import com.hub.demo.domain.food.presentation.dto.response.FoodListResponseDto;
 import com.hub.demo.domain.food.service.FoodService;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,11 @@ public class FoodController {
                                                  @RequestParam(value = "page", defaultValue = "1") int page,
                                                  @RequestParam(value = "limit", defaultValue = "10") int limit) {
         return foodService.getFoodByCategory(category, page, limit);
+    }
+
+    @GetMapping("/detail/{id}")
+    public FoodDetailResponseDto getDetailFood(@PathVariable(name = "id") Long id) {
+        return foodService.getDetailFood(id);
     }
 
     @GetMapping("/category/list")

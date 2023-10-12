@@ -20,13 +20,16 @@ public class Food {
 
     private int price;
 
+    private String content;
+
     @Column(columnDefinition = "TINYINT(1) default 0")
     private Boolean isEvent;
 
     private String imageUrl;
 
     @Builder
-    public Food(String category, String foodName, int price) {
+    public Food(String category, String foodName, int price, String content) {
+        this.content = content;
         this.category = category;
         this.foodName = foodName;
         this.price = price;

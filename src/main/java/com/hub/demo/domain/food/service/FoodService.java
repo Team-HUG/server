@@ -5,6 +5,7 @@ import com.hub.demo.domain.food.domain.repository.FoodRepository;
 import com.hub.demo.domain.food.exception.FoodNotFoundException;
 import com.hub.demo.domain.food.presentation.dto.request.CreateRequestDto;
 import com.hub.demo.domain.food.presentation.dto.response.FoodCategory;
+import com.hub.demo.domain.food.presentation.dto.response.FoodDetailResponseDto;
 import com.hub.demo.domain.food.presentation.dto.response.FoodListResponseDto;
 import com.hub.demo.global.s3.S3Uploader;
 import com.hub.demo.global.util.FoodListBuilder;
@@ -50,6 +51,14 @@ public class FoodService {
                 .orElseThrow(() -> FoodNotFoundException.EXCEPTION);
 
         food.changeEvent();
+    }
+
+    @Transactional(readOnly = true)
+    public FoodDetailResponseDto getDetailFood(Long id) {
+        Food food = foodRepository.findById(id)
+                .orElseThrow(() -> FoodNotFoundException.EXCEPTION);
+
+        return new FoodDetailResponseDto(food);
     }
 
     @Transactional
