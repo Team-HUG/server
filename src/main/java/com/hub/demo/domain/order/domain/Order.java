@@ -24,7 +24,7 @@ public class Order {
     private LocalDateTime createDate = LocalDateTime.now();
 
     @Column(columnDefinition = "TINYINT(1) default 0")
-    private Boolean isComplete;
+    private Boolean isComplete = false;
 
     public Order(List<CartItem> orderItems) {
         this.orderItems = orderItems;

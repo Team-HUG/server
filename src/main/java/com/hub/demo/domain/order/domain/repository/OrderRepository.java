@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
-    List<Order> findByOrderItems_Cart(Cart cart);
+    List<Order> findByOrderItems_CartAndIsComplete(Cart cart, boolean isComplete);
 }
