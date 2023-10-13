@@ -9,6 +9,7 @@ import com.hub.demo.global.util.FoodListBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,15 +24,17 @@ public class OrderService {
     public List<OrderListResponseDto> getOrderList() {
         Cart cart = cartRepository.findByTableNumber(1);
 
-        List<Order> order = orderRepository.findByOrderItems_Cart(cart);
+        List<Order> order = orderRepository.findByOrderItems_CartAndIsComplete(cart, false);
 
         return foodListBuilder.orderBuilder(order);
     }
 
+    @Transactional
     public void isComplete(Long id) {
         Order order = orderRepository.findById(id)
                 .orElseThrow();
 
         order.changeIsComplete();
+        orderRepository.save(order);
     }
 }
